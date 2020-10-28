@@ -1,0 +1,26 @@
+  <nav class="">
+  <div class="site-title">
+    <a href="/">
+      <h1 class="">My Blog</h1>
+    </a>
+  </div>
+  <% if(user) {%>
+    <ul>
+
+      <li style="text-transform:capitalize;"><a>Welcome, <span style="text-transform: lowercase;"><%= user.email%></span></a></li>
+    </ul>
+  <% } %>
+  <ul class="flex">
+    <li><a href="/">Blogs</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/blogs/create">New Blog</a></li>
+    <% if(user) {%>
+
+      <li><a href="/auth/logout">Logout</a></li>
+      <%} else {%>
+        <li><a href="/auth/signup">Sign Up</a></li>
+        <li><a href="/auth/login">Login</a></li>
+      <% }%>
+  </ul>
+  
+</nav>

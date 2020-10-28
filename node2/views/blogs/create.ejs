@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("../partials/header.ejs")%>
+<body>
+    <%- include("../partials/nav.ejs")%>
+    <div class="create-blog content">
+      <form>
+        <label for="title">Blog title:</label>
+        <input type="text" id="title" name="title" />
+<div class="titleErr"></div>
+        <label for="snippet">Blog snippet:</label>
+        <input type="text" id="snippet" name="snippet" />
+        <div class="snippetErr"></div>
+        <label for="body">Blog body:</label>
+        <textarea id="body" name="body"></textarea>
+        <div class="bodyErr"></div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    <%- include("../partials/footer.ejs")%>
+    <script>
+      const form = document.querySelector("form")
+      
+      
+      const titleE = document.querySelector(".titleErr")
+      const snippetE = document.querySelector(".snippetErr")
+      const bodyE = document.querySelector(".bodyErr")
+      
+      
+      console.log(title,snippet,body);
+      form.addEventListener('submit',async (e)=> {
+          e.preventDefault();
+          
+          titleE.textContent = ''
+          snippetE.textContent = ''
+          bodyE.textContent = ''
+          
+          const title = form.title.value;
+          const snippet = form.snippet.value;
+          const body = form.body.value;
+          
+          try {
+          const res = await fetch("/blogs",{
+            method: "POST",
+            body: JSON.stringify({
+              title,snippet,body
+            }),
+            headers: {'Content-Type': 'application/json'}
+          });
+          const data = await res.json();
+          if(data.errors){
+          titleE.textContent = data.errors.title;
+          snippetE.textContent = data.errors.snippet;
+          bodyE.textContent = data.errors.body;            
+          }
+          console.log(data);
+          if(data.blog){
+              location.assign("/")
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      })
+    </script>
+</body>
+</html>

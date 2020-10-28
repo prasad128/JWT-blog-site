@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("../partials/header.ejs")%>
+<body>
+    <%- include("../partials/nav.ejs")%>
+    <h1 style="text-align: center;">Signup</h1>
+     <div class="create-blog content">
+      <form>
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" placeholder="email" />
+<div class="emailErr"></div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="password" />
+        <div class="passwordErr"></div>
+  
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    <%- include("../partials/footer.ejs")%>
+
+         <script>
+        const form = document.querySelector("form")
+        const emailError = document.querySelector(".emailErr")
+        const passwordError = document.querySelector(".passwordErr")
+
+        form.addEventListener("submit",async (e) => {
+            e.preventDefault()
+            const email = form.email.value;
+            const password = form.password.value;
+
+            emailError.textContent = '';
+            passwordError.textContent = ''
+     
+            try {
+                const res = await fetch("/auth/signup",{
+                    method: "POST",
+                    body: JSON.stringify({email,password}),
+                    headers: {"Content-Type": "application/json"}
+                })
+                const data = await res.json()
+                console.log(data);
+                if(data.user){
+                    // location.assign("/")
+                }
+                if(data.errors){
+                    console.log(data.errors);
+                     emailError.textContent = data.errors.email;
+                     passwordError.textContent = data.errors.password
+                }
+            } catch (err) {
+                console.log(err);
+            }
+
+        })
+    </script>
+    
+</body>
+</html>
